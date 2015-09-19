@@ -178,22 +178,15 @@ function update(data){
 			
 			var colorScale = d3.scale.category10();
 			
-			var xRegion = d3.scale.ordinal()
-				.domain(data.map(function(d) { return d.region; }))
+			var x = d3.scale.ordinal()
+				.domain(data.map(function(d) { return d[0][0]; }))
 				.rangeRoundBands([0, width], .15);
 			
-			var xCategory = d3.scale.ordinal()
-				.domain(data.map(function(d) { return d.category; }))
-				.rangeRoundBands([0, width], .15);
 				
 			var y = d3.scale.linear().range([height, 0]);
-			
-			var xAxisRegion = d3.svg.axis()
-				.scale(xRegion)
-				.orient("bottom")
-				//.tick(4);
-			var xAxisCategory = d3.svg.axis()
-				.scale(xCategory)
+	
+			var xAxis= d3.svg.axis()
+				.scale(x)
 				.orient("bottom")
 				//.tick(4);
 			var yAxis = d3.svg.axis()
@@ -206,12 +199,12 @@ function update(data){
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g");
 
-			y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+			y.domain([0, d3.max(data, function(d) { return d[0][1]; })]);
 		  
 			svg.select("g")
 			  .attr("class", "x axis")
 			  .attr("transform", "translate(0," + height + ")")
-			  .call(xAxisRegion)
+			  .call(x)
 			.selectAll("text")
 			  .style("text-anchor", "end")
 			  .attr("dx", "1em")
@@ -232,10 +225,10 @@ function update(data){
 				  .data(data)
 				.enter().append("rect")
 				  //.style("fill", "green")
-				  .attr("x", function(d) { return xRegion(d.region); })
-				  .attr("width", xRegion.rangeBand())
-				  .attr("y", function(d) { return y(d.sales); })
-				  .attr("height", function(d) { return height - y(d.sales); })
+				  .attr("x", function(d) { return x(d[0][0]); })
+				  .attr("width", x.rangeBand())
+				  .attr("y", function(d) { return y(d[0][1]); })
+				  .attr("height", function(d) { return height - y(d[0][1]); })
 				  .style("fill",function(d,i){return colorScale(i);})
 		
 	
