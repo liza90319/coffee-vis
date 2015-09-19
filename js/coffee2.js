@@ -168,12 +168,13 @@ function update(data){
 			
 			
   	//Get the header
-	
-	
-	
+
 	var x = d3.scale.ordinal()
-			.rangeRoundBands([0, width], .15);
-	var y = d3.scale.linear().range([height, 0]);
+			.rangeRoundBands([0, width], .15)
+			.domain(data.map(function(d) { return d.xSelection; }));
+			
+	var y = d3.scale.linear().range([height, 0])
+			.domain([0, d3.max(data, function(d) { return d.ySelection; })]);
 	var xAxis = d3.svg.axis()
 		.scale(x)
 		.orient("bottom")
@@ -183,35 +184,17 @@ function update(data){
 		.orient("right")
 		.ticks(5);
 	
-			
-	
-			
-	var x = d3.scale.ordinal()
-			.domain(data.map(function(d) { return d.xSelection; }))
-			.rangeRoundBands([0, width], .15);		
-	var y = d3.scale.linear().range([height, 0]);
-	
-			var xAxis= d3.svg.axis()
-				.scale(x)
-				.orient("bottom")
-				//.tick(4);
-			var yAxis = d3.svg.axis()
-				.scale(y)
-				.orient("right")
-				.ticks(5);
-				
-			var svg = d3.select("body").append("svg")
+	var svg = d3.select("body").append("svg")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g");
 
-	y.domain([0, d3.max(data, function(d) { return d.ySelection; })]);
 		  
-			svg.select("g")
+		svg.select("g")
 			  .attr("class", "x axis")
 			  .attr("transform", "translate(0," + height + ")")
 			  .call(x)
-			.selectAll("text")
+			  .selectAll("text")
 			  .style("text-anchor", "end")
 			  .attr("dx", "1em")
 			  .attr("dy", "1em");
