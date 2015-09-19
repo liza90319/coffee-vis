@@ -4,7 +4,7 @@ var width = 300;
 
 var margin = {top:20, right:20, bottom:30, left:40};
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select("#vis").append("svg")
 	.attr("width",width + margin.left + margin.right)
 	.attr("height", height + margin.top+margin.bottom)
 	.append("g")
@@ -57,47 +57,50 @@ function init(){
 				
 			var y = d3.scale.linear().range([height, 0]);
 			
-			var xAxisRegion = d3.svg.axis()
+			var xAxis = d3.svg.axis()
 				.scale(xRegion)
 				.orient("bottom")
 				//.tick(4);
-			var xAxisCategory = d3.svg.axis()
+			
+			/*var xAxisCategory = d3.svg.axis()
 				.scale(xCategory)
 				.orient("bottom")
-				//.tick(4);
+				//.tick(4);*/
+				
 			var yAxis = d3.svg.axis()
 				.scale(y)
 				.orient("right")
 				.ticks(5);
 				
-			var svg = d3.select("#vis").append("svg")
+			chart
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g");
 
 			y.domain([0, d3.max(data, function(d) { return d.sales; })]);
 		  
-			svg.append("g")
+			chart.append("g")
 			  .attr("class", "x axis")
 			  .attr("transform", "translate(0," + height + ")")
-			  .call(xAxisRegion)
+			  .call(xAxis)
 			.selectAll("text")
 			  .style("text-anchor", "end")
 			  .attr("dx", "1em")
 			  .attr("dy", "1em");
 			  //.attr("transform", "rotate(-90)" );
 			 
-			 svg.append("g")
+			
+			vis
 				  .attr("class", "y axis")
 				  .attr("transform", "translate("+ width +",0)")
 				  .call(yAxis)
 				  .append("text")
 				 // .attr("y", 10)
-				  .attr("dy", "20em")
+				  .attr("dy", "5em")
 				  //.style("text-anchor", "end")
 				  //.text("Value ($)");
 			  
-			  svg.selectAll("bar")
+			 chart.selectAll("bar")
 				  .data(data)
 				.enter().append("rect")
 				  //.style("fill", "green")
