@@ -153,6 +153,8 @@ function update(data){
 	var ySelection = getYSelectedOption();
 	var test = xSelection;
 		
+	console.log(data);
+	
 	data.forEach(function(d,i) {
 				d.sales = +d.sales;
 				d.profit = +d.profit;
@@ -160,18 +162,20 @@ function update(data){
 				console.log(d.ySelection);*/
 				console.log(data[i][xSelection]);
 				console.log(data[i][ySelection]);
-				
-				var testArray=[];
-				testArray.push(data[i][xSelection]);
-				testArray = testArray.concat(testArray);
-				console.log(testArray);
 			});
-			
+	/*for (var i=0;i<=4;i++){
+		console.log(data[i][xSelection]);
+		var testArray = [];
+		console.log(data[i][xSelection]);
+		testArray = testArray.push(data[i][xSelection]);
+		console.log(testArray);
+		}*/
+	
 			
   	//Get the header
 
 	var x = d3.scale.ordinal()
-			.rangeRoundBands([0, width], .15)
+			.rangeRoundBands([0, width], .05)
 			.domain(data.map(function(d) { return d.xSelection; }));
 			
 	var y = d3.scale.linear().range([height, 0])
@@ -188,8 +192,8 @@ function update(data){
 	var svg = d3.select("body").append("svg")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
-				.append("g");
-
+				.select(".x.axis")
+				.call(x);
 		  
 		svg.select("g")
 			  .attr("class", "x axis")
