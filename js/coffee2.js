@@ -163,6 +163,7 @@ function update(data){
 				
 				var testArray=[];
 				testArray.push(data[i][xSelection]);
+				testArray = testArray.concat(testArray);
 				console.log(testArray);
 			});
 			
