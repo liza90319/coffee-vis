@@ -120,7 +120,6 @@ function init(){
 	
 
 
-
 //Called when the update button is clicked
 function updateClicked(){
 	var xSelection = getXSelectedOption();
@@ -130,11 +129,12 @@ function updateClicked(){
 	console.log(ySelection);
 	//d3.csv('data/CoffeeData.csv',update);
 	
-	//if (xSelection == "region" && ySelection== "sales") {
-	
-		//}
+	if (xSelection == "region" && ySelection== "sales") {
+			console.log("load SalesSumByRegion");	
+			d3.csv('data/SalesSumByRegion.csv', update);
+		}
 		
-		/*else if(xSelection == "category" && ySelection== "sales"){
+		else if(xSelection == "category" && ySelection== "sales"){
 			console.log("load SalesSumByCategory");	
 			d3.csv('data/SalesSumByCategory.csv', update);
 			
@@ -147,7 +147,7 @@ function updateClicked(){
 		}
 		else {
 			d3.csv('data/ProfitSumByCategory.csv',update);
-		}*/
+		}
 }
 
 //Callback for when data is loaded
