@@ -154,9 +154,22 @@ function updateClicked(){
 
 function update(data){
   //PUT YOUR UPDATE CODE BELOW
-  	
+	data.forEach(function(d) {
+				d.sales = +d.sales;
+				d.profit = +d.profit;
+				
+				console.log(d.profit);
+				console.log(d.sales);
+			});
+  
+  	var xSelection = getXSelectedOption();
+	var ySelection = getYSelectedOption();	
 	console.log(data);
-	console.log(data[0][0]);
+	console.log(xSelection);
+	var test = xSelection;
+	console.log(data.region);
+	console.log(data[getYSelectedOption()]);
+	
 	
 	/*var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .05);
