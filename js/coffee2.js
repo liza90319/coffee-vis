@@ -126,6 +126,8 @@ function updateClicked(){
 	var xSelection = getXSelectedOption();
 	var ySelection = getYSelectedOption();
 	
+	console.log(xSelection);
+	console.log(ySelection);
 	//d3.csv('data/CoffeeData.csv',update);
 	
 	//if (xSelection == "region" && ySelection== "sales") {
