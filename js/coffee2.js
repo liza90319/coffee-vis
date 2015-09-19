@@ -155,7 +155,8 @@ function updateClicked(){
 function update(data){
   //PUT YOUR UPDATE CODE BELOW
   	
-	var x = d3.scale.ordinal()
+	console.log(data);
+	/*var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .05);
 	var y = d3.scale.linear().range([height, 0]);
 	var xAxis = d3.svg.axis()
@@ -173,7 +174,8 @@ function update(data){
 				d.sales = +d.sales;
 				d.profit = +d.profit;
 				
-				console.log(d.profit);
+				console.log(d[0][0]);
+				
 			});
 			
 			var colorScale = d3.scale.category10();
@@ -225,9 +227,9 @@ function update(data){
 				  .data(data)
 				.enter().append("rect")
 				  //.style("fill", "green")
-				  .attr("x", function(d) { return x(d[0][0]); })
+				  .attr("x", function(d) { return d[0][0]; })
 				  .attr("width", x.rangeBand())
-				  .attr("y", function(d) { return y(d[0][1]); })
+				  .attr("y", function(d) { return d[0][1]; })
 				  .attr("height", function(d) { return height - y(d[0][1]); })
 				  .style("fill",function(d,i){return colorScale(i);})
 		
