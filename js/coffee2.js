@@ -183,6 +183,7 @@ function update(data){
 			
 	var y = d3.scale.linear().range([height, 0])
 			.domain([0, d3.max(data, function(d) { return d.ySelection; })]);
+	
 	var xAxis = d3.svg.axis()
 		.scale(x)
 		.orient("bottom")
@@ -192,24 +193,24 @@ function update(data){
 		.orient("right")
 		.ticks(5);
 	
-	d3.select("body").select("svg")
-				.attr("width", width + margin.left + margin.right)
-				.attr("height", height + margin.top + margin.bottom)
-				.select(".x.axis")
-				.call(x);
+	   chart
+			  .attr("width", width + margin.left + margin.right)
+			  .attr("height", height + margin.top + margin.bottom)
+			  //.select(".x.axis")
+			  //.call(x);
 		  
-		svg.select("g")
-			  .attr("class", "x axis")
-			  .attr("transform", "translate(0," + height + ")")
-			  .call(x)
+		chart.select("g")
+			 // .attr("class", "x axis")
+			  //.attr("transform", "translate(0," + height + ")")
+			  .call(xAxis)
 			  .selectAll("text")
-			  .style("text-anchor", "end")
+			  //.style("text-anchor", "end")
 			  .attr("dx", "1em")
 			  .attr("dy", "1em");
 			  //.attr("transform", "rotate(-90)" );
 			 
-			 svg.select("g")
-				  .attr("class", "y axis")
+		vis
+				 .attr("class", "y axis")
 				  .attr("transform", "translate("+ width +",0)")
 				  .call(yAxis)
 				  .select("text")
@@ -218,7 +219,7 @@ function update(data){
 				  //.style("text-anchor", "end")
 				  //.text("Value ($)");
 			  
-			  svg.selectAll("bar")
+			  chart.selectAll("bar")
 				  .data(data)
 				.enter().select("rect")
 				  //.style("fill", "green")
