@@ -123,8 +123,7 @@ function init(){
 //Called when the update button is clicked
 function updateClicked(){
 	var xSelection = getXSelectedOption();
-	var ySelection = getYSelectedOption();
-	
+	var ySelection = getYSelectedOption();	
 	console.log(xSelection);
 	console.log(ySelection);
 	//d3.csv('data/CoffeeData.csv',update);
@@ -141,11 +140,12 @@ function updateClicked(){
 			}
 		
 		 else if (xSelection == "region" && ySelection== "profit") {
-			d3.csv('data/ProfitSumByRegion.csv',update);
 			console.log("load data/ProfitSumByRegion.csv");	
+			d3.csv('data/ProfitSumByRegion.csv',update);
 		
 		}
 		else {
+			console.log("load data/ProfitSumByCategory.csv");	
 			d3.csv('data/ProfitSumByCategory.csv',update);
 		}
 }
@@ -154,7 +154,93 @@ function updateClicked(){
 
 function update(data){
   //PUT YOUR UPDATE CODE BELOW
-  	//data.forEach(function(d){
+  	
+	var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .05);
+	var y = d3.scale.linear().range([height, 0]);
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+		//.tick(4);
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("right")
+		.ticks(5);
+	
+	
+	
+	data.forEach(function(d) {
+				d.sales = +d.sales;
+				d.profit = +d.profit;
+				
+				console.log(d.profit);
+			});
+			
+			var colorScale = d3.scale.category10();
+			
+			var xRegion = d3.scale.ordinal()
+				.domain(data.map(function(d) { return d.region; }))
+				.rangeRoundBands([0, width], .15);
+			
+			var xCategory = d3.scale.ordinal()
+				.domain(data.map(function(d) { return d.category; }))
+				.rangeRoundBands([0, width], .15);
+				
+			var y = d3.scale.linear().range([height, 0]);
+			
+			var xAxisRegion = d3.svg.axis()
+				.scale(xRegion)
+				.orient("bottom")
+				//.tick(4);
+			var xAxisCategory = d3.svg.axis()
+				.scale(xCategory)
+				.orient("bottom")
+				//.tick(4);
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("right")
+				.ticks(5);
+				
+			var svg = d3.select("body").append("svg")
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g");
+
+			y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+		  
+			svg.select("g")
+			  .attr("class", "x axis")
+			  .attr("transform", "translate(0," + height + ")")
+			  .call(xAxisRegion)
+			.selectAll("text")
+			  .style("text-anchor", "end")
+			  .attr("dx", "1em")
+			  .attr("dy", "1em");
+			  //.attr("transform", "rotate(-90)" );
+			 
+			 svg.append("g")
+				  .attr("class", "y axis")
+				  .attr("transform", "translate("+ width +",0)")
+				  .call(yAxis)
+				  .append("text")
+				 // .attr("y", 10)
+				  .attr("dy", "20em")
+				  //.style("text-anchor", "end")
+				  //.text("Value ($)");
+			  
+			  svg.selectAll("bar")
+				  .data(data)
+				.enter().append("rect")
+				  //.style("fill", "green")
+				  .attr("x", function(d) { return xRegion(d.region); })
+				  .attr("width", xRegion.rangeBand())
+				  .attr("y", function(d) { return y(d.sales); })
+				  .attr("height", function(d) { return height - y(d.sales); })
+				  .style("fill",function(d,i){return colorScale(i);})
+		
+	
+	
+	//data.forEach(function(d){
 		
 		
 		//if statements
