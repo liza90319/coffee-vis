@@ -3,12 +3,6 @@ var height = 200;
 var width = 300;
 
 var margin = {top:20, right:20, bottom:30, left:40};
-	
-var y = d3.scale.linear()
-	.range([height,0]);
-var x = d3.scale.ordinal()
-	.range(["north", "west", "south", "central"]);
-
 
 var svg = d3.select("body").append("svg")
 	.attr("width",width + margin.left + margin.right)
@@ -16,7 +10,7 @@ var svg = d3.select("body").append("svg")
 	.append("g")
 	.attr("transform","translate(" + margin.left + "," + margin.top + ")");
 	
-	
+var colorScale = d3.scale.category10();
 //DEFINE YOUR VARIABLES UP HERE
 
 
@@ -154,25 +148,31 @@ function updateClicked(){
 
 function update(data){
   //PUT YOUR UPDATE CODE BELOW
-	data.forEach(function(d) {
+	
+	var xSelection = getXSelectedOption();
+	var ySelection = getYSelectedOption();
+	var test = xSelection;
+		
+	data.forEach(function(d,i) {
 				d.sales = +d.sales;
 				d.profit = +d.profit;
+				/*console.log(d.xSelection);
+				console.log(d.ySelection);*/
+				console.log(data[i][xSelection]);
+				console.log(data[i][ySelection]);
 				
-				console.log(d.profit);
-				console.log(d.sales);
+				var testArray=[];
+				testArray.push(data[i][xSelection]);
+				console.log(testArray);
 			});
-  
-  	var xSelection = getXSelectedOption();
-	var ySelection = getYSelectedOption();	
-	console.log(data);
-	console.log(xSelection);
-	var test = xSelection;
-	console.log(data.region);
-	console.log(data[getYSelectedOption()]);
+			
+			
+  	//Get the header
 	
 	
-	/*var x = d3.scale.ordinal()
-			.rangeRoundBands([0, width], .05);
+	
+	var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .15);
 	var y = d3.scale.linear().range([height, 0]);
 	var xAxis = d3.svg.axis()
 		.scale(x)
@@ -183,23 +183,13 @@ function update(data){
 		.orient("right")
 		.ticks(5);
 	
+			
 	
-	data.forEach(function(d) {
-				d.sales = +d.sales;
-				d.profit = +d.profit;
-				
-				console.log(d[0][0]);
-				
-			});
 			
-			var colorScale = d3.scale.category10();
-			
-			var x = d3.scale.ordinal()
-				.domain(data.map(function(d) { return d[0][0]; }))
-				.rangeRoundBands([0, width], .15);
-			
-				
-			var y = d3.scale.linear().range([height, 0]);
+	var x = d3.scale.ordinal()
+			.domain(data.map(function(d) { return d.xSelection; }))
+			.rangeRoundBands([0, width], .15);		
+	var y = d3.scale.linear().range([height, 0]);
 	
 			var xAxis= d3.svg.axis()
 				.scale(x)
@@ -215,7 +205,7 @@ function update(data){
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g");
 
-			y.domain([0, d3.max(data, function(d) { return d[0][1]; })]);
+	y.domain([0, d3.max(data, function(d) { return d.ySelection; })]);
 		  
 			svg.select("g")
 			  .attr("class", "x axis")
@@ -241,10 +231,10 @@ function update(data){
 				  .data(data)
 				.enter().append("rect")
 				  //.style("fill", "green")
-				  .attr("x", function(d) { return d[0][0]; })
+				  .attr("x", function(d) { return d.xSelection; })
 				  .attr("width", x.rangeBand())
-				  .attr("y", function(d) { return d[0][1]; })
-				  .attr("height", function(d) { return height - y(d[0][1]); })
+				  .attr("y", function(d) { return d.ySelection; })
+				  .attr("height", function(d) { return height - y(d.ySelection); })
 				  .style("fill",function(d,i){return colorScale(i);})
 		
 	
