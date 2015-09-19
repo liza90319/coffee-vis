@@ -42,7 +42,7 @@ function init(){
 				d.sales = +d.sales;
 				d.profit = +d.profit;
 				
-				console.log(d.profit);
+				//console.log(d.profit);
 			});
 			
 			var colorScale = d3.scale.category10();
@@ -180,6 +180,7 @@ function update(data){
 	var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .05)
 			.domain(data.map(function(d) { return d.xSelection; }));
+	
 			
 	var y = d3.scale.linear().range([height, 0])
 			.domain([0, d3.max(data, function(d) { return d.ySelection; })]);
@@ -193,13 +194,13 @@ function update(data){
 		.orient("right")
 		.ticks(5);
 	
-	   chart
+	  chart
 			  .attr("width", width + margin.left + margin.right)
 			  .attr("height", height + margin.top + margin.bottom)
 			  //.select(".x.axis")
 			  //.call(x);
 		  
-		chart.select("g")
+		chart.select(".x.axis")
 			 // .attr("class", "x axis")
 			  //.attr("transform", "translate(0," + height + ")")
 			  .call(xAxis)
@@ -209,17 +210,17 @@ function update(data){
 			  .attr("dy", "1em");
 			  //.attr("transform", "rotate(-90)" );
 			 
-		vis
-				 .attr("class", "y axis")
-				  .attr("transform", "translate("+ width +",0)")
+		chart.select(".y.axis")
+				// .attr("class", "y axis")
+				  //.attr("transform", "translate("+ width +",0)")
 				  .call(yAxis)
 				  .select("text")
-				 // .attr("y", 10)
+				 .attr("y", 10)
 				  .attr("dy", "20em")
-				  //.style("text-anchor", "end")
+				  .style("text-anchor", "end")
 				  //.text("Value ($)");
 			  
-			  chart.selectAll("bar")
+			chart.selectAll("bar")
 				  .data(data)
 				.enter().select("rect")
 				  //.style("fill", "green")
