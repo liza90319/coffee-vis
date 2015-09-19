@@ -70,7 +70,7 @@ function init(){
 				.orient("right")
 				.ticks(5);
 				
-			var svg = d3.select("body").append("svg")
+			var svg = d3.select("#vis").append("svg")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
 				.append("g");
@@ -189,7 +189,7 @@ function update(data){
 		.orient("right")
 		.ticks(5);
 	
-	var svg = d3.select("body").append("svg")
+	d3.select("body").select("svg")
 				.attr("width", width + margin.left + margin.right)
 				.attr("height", height + margin.top + margin.bottom)
 				.select(".x.axis")
@@ -205,11 +205,11 @@ function update(data){
 			  .attr("dy", "1em");
 			  //.attr("transform", "rotate(-90)" );
 			 
-			 svg.append("g")
+			 svg.select("g")
 				  .attr("class", "y axis")
 				  .attr("transform", "translate("+ width +",0)")
 				  .call(yAxis)
-				  .append("text")
+				  .select("text")
 				 // .attr("y", 10)
 				  .attr("dy", "20em")
 				  //.style("text-anchor", "end")
@@ -217,7 +217,7 @@ function update(data){
 			  
 			  svg.selectAll("bar")
 				  .data(data)
-				.enter().append("rect")
+				.enter().select("rect")
 				  //.style("fill", "green")
 				  .attr("x", function(d) { return d.xSelection; })
 				  .attr("width", x.rangeBand())
