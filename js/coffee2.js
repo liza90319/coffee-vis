@@ -156,6 +156,8 @@ function update(data){
   //PUT YOUR UPDATE CODE BELOW
   	
 	console.log(data);
+	console.log(data[0][0]);
+	
 	/*var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .05);
 	var y = d3.scale.linear().range([height, 0]);
@@ -167,7 +169,6 @@ function update(data){
 		.scale(y)
 		.orient("right")
 		.ticks(5);
-	
 	
 	
 	data.forEach(function(d) {
