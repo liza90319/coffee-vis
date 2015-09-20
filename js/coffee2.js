@@ -179,11 +179,11 @@ function update(data){
 
 	var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .05)
-			.domain(data.map(function(d) { return d.xSelection; }));
+			.domain(data.map(function(d) { return d[xSelection]; }));
 	
 			
 	var y = d3.scale.linear().range([height, 0])
-			.domain([0, d3.max(data, function(d) { return d.ySelection; })]);
+			.domain([0, d3.max(data, function(d) { return d[ySelection]; })]);
 	
 	var xAxis = d3.svg.axis()
 		.scale(x)
@@ -220,77 +220,21 @@ function update(data){
 				  .style("text-anchor", "end")
 				  //.text("Value ($)");
 			  
-			chart.selectAll("bar")
+		
+		vis.selectAll("bar")
 				  .data(data)
-				.enter().select("rect")
-				  //.style("fill", "green")
-				  .attr("x", function(d) { return d.xSelection; })
+				  .exit().remove();
+					//.enter().select("rect")
+		
+		chart.selectAll("bar")
+				  .append('rect')
+				  	 .style("fill",function(d,i){return colorScale(i);});
+		chart.selectAll("bar")	
+				  .attr("x", function(d) { return d[xSelection]; })
 				  .attr("width", x.rangeBand())
-				  .attr("y", function(d) { return d.ySelection; })
-				  .attr("height", function(d) { return height - y(d.ySelection); })
-				  .style("fill",function(d,i){return colorScale(i);})
-		
-	
-	
-	//data.forEach(function(d){
-		
-		
-		//if statements
-		
-	
-	
-		
-		
-		/*d.sales = + d.sales;
-		d.profit = + d.profit;
-		 
-		var yValue1 = d.sales;
-		var yValue2 = d.profit;
-		var xValue1 = d.region;
-		var xValue2 = d.category;
-		
-		if(yValue1 == "undefined"){
-			var yValue = yValue2;
-			console.log(yValue);
-			}
-		else if(yValue2 == "undefined"){
-			var yValue = yValue1;
-			console.log(yValue);
-			}
-
-		console.log("sales is:" + yValue1);
-		console.log("profit is" + yValue2);
-		console.log("region is:" + xValue1);
-		console.log("category is" + xValue2);
-	})
-		 
-	    d3.select("#chart")
-	   	.selectAll("div")
-			.data(rawdata)
-		.enter().append("div")
-			.style("width",function(d){return d.sales / 100 + 'px'})
-			.text(function(d) { return d.sales;});
-		
-		d3.select("body").selectAll("p")
-			.data(rawdata)
-			.text(function(d) { return d.sales;});
-		
-		
-		svg.selectAll("bar")
-			  .data(rawdata)
-			.enter().append("rect")
-			  //.style("fill", "green")
-			  .attr("x", function(d) { return x(d.region); })
-			  .attr("width", x.rangeBand())
-			  .attr("y", function(d) { return y(d.sales); })
-			  .attr("height", function(d) { return height - y(d.sales); });
-		 
-		  svg.selectAll("rect")
-				.style("fill",function(d,i){return colorScale(i);})
-		*/
-		
-		
-	
+				  .attr("y", function(d) { return d[ySelection]; })
+				  .attr("height", function(d) { return height - y(d[ySelection]); })
+				 
 }
 
 // Returns the selected option in the X-axis dropdown. Use d[getXSelectedOption()] to retrieve value instead of d.getXSelectedOption()
