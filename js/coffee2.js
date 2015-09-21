@@ -167,7 +167,7 @@ function update(data){
 				console.log(data[i][ySelection]);
 			});
 	var x = d3.scale.ordinal()
-			.rangeRoundBands([0, width], .05)
+			.rangeRoundBands([0, width], .15)
 			.domain(data.map(function(d) { return d[xSelection]; }));
 	
 			
