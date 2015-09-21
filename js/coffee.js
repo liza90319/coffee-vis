@@ -3,117 +3,231 @@ var height = 200;
 var width = 300;
 
 var margin = {top:20, right:20, bottom:30, left:40};
-	
-var y = d3.scale.linear()
-	.range([height,0]);
-var x = d3.scale.ordinal()
-	.range(["north", "west", "south", "central"]);
-	
-var svg = d3.select("body").append("svg")
+
+var svg = d3.select("#vis").append("svg")
 	.attr("width",width + margin.left + margin.right)
 	.attr("height", height + margin.top+margin.bottom)
 	.append("g")
 	.attr("transform","translate(" + margin.left + "," + margin.top + ")");
-	
-	
+
+var firstLoad=true;
+var colorScale = d3.scale.category10();
 //DEFINE YOUR VARIABLES UP HERE
 
 
 //Gets called when the page is loaded.
+
+  
 function init(){
+	}
+
+function init2(){	
   chart = d3.select('#vis').append('svg');
   vis = chart.append('g');
   //PUT YOUR INIT CODE BELOW
-
- d3.csv('data/ProfitSumByRegion.csv',function(error,data){
-	  y.domain([0,d3.max(data,function(d){return d.profit;})]);
-	  
-	   data.forEach(function(d){
-		d.sales = +d.sales; 
-		  })
-	  
-	  var barWidth = width / data.length;
-	  
-	  var bar=chart.selectAll("#vis")
-	 		.data(data)
-			.enter().append("g")
-			.attr("transform",function(d,i){ return "translate (" + i * barWidth + "0)";});
-		  
-		  bar.append("rect")
-		  	.attr("y",function(d){return y(d.profit);})
-			.attr("height", function(d){return height - y (d.profit);})
-			.attr("width", barWidth - 1);
-			
-		  bar.append("text")
-		  	.attr("x",barWidth/2)
-			.attr("y",function(d){ return y(d.profit) +3;})
-			.attr("dy",".75em")
-			.text(function(d){return d.profit;})
-			
-	 
-	  
+	var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .15);
+	var y = d3.scale.linear().range([height, 0]);
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+		//.tick(4);
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("right")
+		.ticks(5);
 	
-	 //append text for sales to body
-	   d3.select("body").selectAll("div")
-		.data(data)
-		.enter()
-		.append("div")
-		.append("svg")
-		.append("text")
-		.text(function(d) { return d.profit;});
-	  });
 		
+		d3.csv("data/SalesSumByRegion.csv", function(error, data) {
+		
+		
+			data.forEach(function(d) {
+				d.sales = +d.sales;
+				d.profit = +d.profit;
+				
+				//console.log(d.profit);
+			});
+			
+			var colorScale = d3.scale.category10();
+			
+			var xRegion = d3.scale.ordinal()
+				.domain(data.map(function(d) { return d.region; }))
+				.rangeRoundBands([0, width], .15);
+			
+	
+				
+			var y = d3.scale.linear().range([height, 0]);
+			
+			var xAxis = d3.svg.axis()
+				.scale(xRegion)
+				.orient("bottom")
+				//.tick(4);
+			
+	
+				
+			var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient("right")
+				.ticks(5);
+				
+			chart
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g");
 
- 
-}
-
-
+			y.domain([0, d3.max(data, function(d) { return d.sales; })]);
+		  
+			chart.append("g")
+			  .attr("class", "x axis")
+			  .attr("transform", "translate(0," + height + ")")
+			  .call(xAxis)
+			.selectAll("text")
+			  .style("text-anchor", "end")
+			  .attr("dx", "1em")
+			  .attr("dy", "1em");
+			  //.attr("transform", "rotate(-90)" );
+			 
+			
+			vis
+				  .attr("class", "y axis")
+				  .attr("transform", "translate("+ width +",0)")
+				  .call(yAxis)
+				  .append("text")
+				 // .attr("y", 10)
+				  .attr("dy", "5em")
+	
+			  
+			 chart.selectAll("rect")
+				  .data(data)
+				.enter().append("rect")
+				  //.style("fill", "green")
+				  .attr("x", function(d) { return xRegion(d.region); })
+				  .attr("width", xRegion.rangeBand())
+				  .attr("y", function(d) { return y(d.sales); })
+				  .attr("height", function(d) { return height - y(d.sales); })
+				  .style("fill",function(d,i){return colorScale(i);})
+		
+		 
+		 
+		 
+		});	
+	
+	
+	}	
 
 
 //Called when the update button is clicked
 function updateClicked(){
-	
 	var xSelection = getXSelectedOption();
-	var ySelection = getYSelectedOption();
-	
-	
+	var ySelection = getYSelectedOption();	
 	console.log(xSelection);
+	console.log(ySelection);
+	//d3.csv('data/CoffeeData.csv',update);
 	
 	if (xSelection == "region" && ySelection== "sales") {
-		d3.csv('data/SalesSumByRegion.csv',update);
+			console.log("load SalesSumByRegion");	
+			d3.csv('data/SalesSumByRegion.csv', update);
+		}
 		
-	} else if (xSelection == "category" && ySelection== "sales") {
-		d3.csv('data/SalesSumByCategory.csv',update);
-	}
-	
-	//getXSelectedOption();
-	//console.log(node);
-	
-  
+		else if(xSelection == "category" && ySelection== "sales"){
+			console.log("load SalesSumByCategory");	
+			d3.csv('data/SalesSumByCategory.csv', update);
+			
+			}
+		
+		 else if (xSelection == "region" && ySelection== "profit") {
+			console.log("load data/ProfitSumByRegion.csv");	
+			d3.csv('data/ProfitSumByRegion.csv',update);
+		
+		}
+		else {
+			console.log("load data/ProfitSumByCategory.csv");	
+			d3.csv('data/ProfitSumByCategory.csv',update);
+		}
 }
 
 //Callback for when data is loaded
-function update(rawdata){
+
+function update(data){
   //PUT YOUR UPDATE CODE BELOW
-  	rawdata.forEach(function(d){
-		d.sales = +d.sales; 
-		 //xx = dataset;
-		 
-		 console.log(d.sales);
-		  })
-	  
-	    d3.select("#chart")
-	   	.selectAll("div")
-			.data(rawdata)
-		.enter().append("div")
-			.style("width",function(d){return d.sales / 100 + 'px'})
-			.text(function(d) { return d.sales;});
-		
-		d3.select("body").selectAll("p")
-		.data(rawdata)
-		.text(function(d) { return d.sales;});
-		
+  
+  	if (firstLoad) { 
+	 	init2(); 
+		firstLoad = false; 
+		}
 	
+	chart = d3.select('#vis').select('svg');
+	var xSelection = getXSelectedOption();
+	var ySelection = getYSelectedOption();
+	var test = xSelection;
+		
+	console.log(data);
+	
+	data.forEach(function(d,i) {
+				d.sales = +d.sales;
+				d.profit = +d.profit;
+				/*console.log(d.xSelection);
+				console.log(d.ySelection);*/
+				console.log(data[i][xSelection]);
+				console.log(data[i][ySelection]);
+			});
+	var x = d3.scale.ordinal()
+			.rangeRoundBands([0, width], .15)
+			.domain(data.map(function(d) { return d[xSelection]; }));
+	
+			
+	var y = d3.scale.linear().range([height, 0])
+			.domain([0, d3.max(data, function(d) { return d[ySelection]; })]);
+	
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom")
+		//.tick(4);
+	var yAxis = d3.svg.axis()
+		.scale(y)
+		.orient("right")
+		.ticks(5);
+	
+	  chart
+			  .attr("width", width + margin.left + margin.right)
+			  .attr("height", height + margin.top + margin.bottom)
+			  //.select(".x.axis")
+			  //.call(x);
+		  
+		chart.select(".x.axis")
+			 // .attr("class", "x axis")
+			  //.attr("transform", "translate(0," + height + ")")
+			  .call(xAxis)
+			  .selectAll("text")
+			  //.style("text-anchor", "end")
+			  .attr("dx", "1em")
+			  .attr("dy", "1em");
+			  //.attr("transform", "rotate(-90)" );
+			 
+		chart.select(".y.axis")
+				// .attr("class", "y axis")
+				  //.attr("transform", "translate("+ width +",0)")
+				  .call(yAxis)
+				  .select("text")
+				// .attr("y", 10)
+				  .attr("dy", "20em")
+				  .style("text-anchor", "end")
+				  //.text("Value ($)");
+			  
+		chart.selectAll("rect").data(data)
+				  .exit().remove();
+					//.enter().select("rect")
+		
+		chart.selectAll("rect")
+				  //.append('rect')
+				  	 .style("fill",function(d,i){return colorScale(i);});
+					 
+		chart.selectAll("rect")	
+				  .attr("x", function(d) { return x(d[xSelection]); })
+				  .attr("width", x.rangeBand())
+				  .attr("y", function(d) { return y(d[ySelection]); })
+				  .attr("height", function(d) { return height - y(d[ySelection]); })
+				 
 }
 
 // Returns the selected option in the X-axis dropdown. Use d[getXSelectedOption()] to retrieve value instead of d.getXSelectedOption()
