@@ -218,9 +218,9 @@ function update(data){
 				  	 .style("fill",function(d,i){return colorScale(i);});
 					 
 		chart.selectAll("rect")	
-				  .attr("x", function(d) { return d[xSelection]; })
+				  .attr("x", function(d) { return x(d[xSelection]); })
 				  .attr("width", x.rangeBand())
-				  .attr("y", function(d) { return d[ySelection]; })
+				  .attr("y", function(d) { return y(d[ySelection]); })
 				  .attr("height", function(d) { return height - y(d[ySelection]); })
 				 
 }
