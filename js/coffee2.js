@@ -100,7 +100,7 @@ function init(){
 				  //.style("text-anchor", "end")
 				  //.text("Value ($)");
 			  
-			 chart.selectAll("bar")
+			 chart.selectAll("rect")
 				  .data(data)
 				.enter().append("rect")
 				  //.style("fill", "green")
@@ -151,7 +151,7 @@ function updateClicked(){
 
 function update(data){
   //PUT YOUR UPDATE CODE BELOW
-	
+	chart = d3.select('#vis').select('svg');
 	var xSelection = getXSelectedOption();
 	var ySelection = getYSelectedOption();
 	var test = xSelection;
@@ -166,17 +166,6 @@ function update(data){
 				console.log(data[i][xSelection]);
 				console.log(data[i][ySelection]);
 			});
-	/*for (var i=0;i<=4;i++){
-		console.log(data[i][xSelection]);
-		var testArray = [];
-		console.log(data[i][xSelection]);
-		testArray = testArray.push(data[i][xSelection]);
-		console.log(testArray);
-		}*/
-	
-			
-  	//Get the header
-
 	var x = d3.scale.ordinal()
 			.rangeRoundBands([0, width], .05)
 			.domain(data.map(function(d) { return d[xSelection]; }));
@@ -220,16 +209,15 @@ function update(data){
 				  .style("text-anchor", "end")
 				  //.text("Value ($)");
 			  
-		
-		vis.selectAll("bar")
-				  .data(data)
+		chart.selectAll("rect").data(data)
 				  .exit().remove();
 					//.enter().select("rect")
 		
-		chart.selectAll("bar")
-				  .append('rect')
+		chart.selectAll("rect")
+				  //.append('rect')
 				  	 .style("fill",function(d,i){return colorScale(i);});
-		chart.selectAll("bar")	
+					 
+		chart.selectAll("rect")	
 				  .attr("x", function(d) { return d[xSelection]; })
 				  .attr("width", x.rangeBand())
 				  .attr("y", function(d) { return d[ySelection]; })
