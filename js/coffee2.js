@@ -31,11 +31,6 @@ function init(){
 		.orient("right")
 		.ticks(5);
 	
-		/*.attr("transform", 
-			  "translate(" + margin.left + "," + margin.top + ")");*/
-	/*var x2 = d3.scale.ordinal()
-			.domain(data.map(function(d) { return d.category; }))
-			.rangeRoundBands([0, width], .15);*/
 		d3.csv("data/SalesSumByRegion.csv", function(error, data) {
 			
 			data.forEach(function(d) {
@@ -51,9 +46,7 @@ function init(){
 				.domain(data.map(function(d) { return d.region; }))
 				.rangeRoundBands([0, width], .15);
 			
-			var xCategory = d3.scale.ordinal()
-				.domain(data.map(function(d) { return d.category; }))
-				.rangeRoundBands([0, width], .15);
+	
 				
 			var y = d3.scale.linear().range([height, 0]);
 			
@@ -62,10 +55,7 @@ function init(){
 				.orient("bottom")
 				//.tick(4);
 			
-			/*var xAxisCategory = d3.svg.axis()
-				.scale(xCategory)
-				.orient("bottom")
-				//.tick(4);*/
+	
 				
 			var yAxis = d3.svg.axis()
 				.scale(y)
@@ -97,8 +87,7 @@ function init(){
 				  .append("text")
 				 // .attr("y", 10)
 				  .attr("dy", "5em")
-				  //.style("text-anchor", "end")
-				  //.text("Value ($)");
+	
 			  
 			 chart.selectAll("rect")
 				  .data(data)
@@ -204,7 +193,7 @@ function update(data){
 				  //.attr("transform", "translate("+ width +",0)")
 				  .call(yAxis)
 				  .select("text")
-				 .attr("y", 10)
+				// .attr("y", 10)
 				  .attr("dy", "20em")
 				  .style("text-anchor", "end")
 				  //.text("Value ($)");
